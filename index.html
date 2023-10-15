@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIMON GAME | @MSO</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+</head>
+
+<body>
+  <button id="rule">know rule</button>
+  <button id="start">start</button>
+  <div id="rules-container" class="visible">
+    <h2>Welcome to Simon! Game</h2>
+    <p>Here's how to play:</p>
+    <ul>
+      <li><strong>Objective:</strong> Test your memory and concentration. Watch and repeat a series of colors and
+        sounds.</li>
+      <li><strong>Colors & Sounds:</strong> There are four colors: <span class="bold">red</span>, <span
+          class="bold">Green</span>, <span class="bold">Blue</span>, and <span class="bold">Yellow</span>, each with its
+        own sound.</li>
+      <li><strong>Start Simple:</strong> It begins with one color. After each success, it adds one more color to the
+        sequence.</li>
+      <li><strong>Your Turn:</strong> Click the buttons in the exact order they lit up during the sequence.</li>
+      <li><strong>Challenge Yourself:</strong> The game gets harder as you go, with longer sequences. Be careful, one
+        mistake ends the game!</li>
+      <li><strong>Winning Streak:</strong> Try to keep the streak going. The more sequences you get right in a row, the
+        higher your score!</li>
+      <li><strong>Have Fun:</strong> Simon is all about enjoying and testing your memory skills. Compete with friends to
+        see who's the best.</li>
+    </ul>
+    <button id="close">close</button>
+  </div>
+  <h1 id="level-title">Click Start Or Press Any Key to Play</h1>
+  <div class="container">
+    <div lass="row">
+
+      <div type="button" id="green" class="btn green">
+
+      </div>
+
+      <div type="button" id="red" class="btn red">
+
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div type="button" id="yellow" class="btn yellow">
+
+      </div>
+      <div type="button" id="blue" class="btn blue">
+
+      </div>
+
+    </div>
+
+  </div>
+  <footer>@Magan Sundar Oram</footer>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="game.js"></script>
+</body>
+
+</html>
