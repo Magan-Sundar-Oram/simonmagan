@@ -1,124 +1,149 @@
-var buttonColours = ["red", "blue", "green", "yellow"];
-var gamePattern = [];
-var userClickedPattern = [];
-var level = 0;
-var started = false;
+let buttonColors = ['red', 'blue', 'green', 'yellow'];
+let gamePattern = [];
+let userClickedPattern = [];
+const button = document.querySelectorAll('.btn');
+const levelIndicator = document.querySelector('#level-title')
+const body = document.querySelector('body');
+const startButton = document.querySelector('#start');
 
-
-
-if (window.matchMedia("(max-width:780px)").matches) {
-    $("h1").text("Click Start To Play")
+//Level Indicator or Heading Change screen Width
+if (window.matchMedia('(max-width:780px)').matches) {
+    levelIndicator.innerText = 'Click Start To Play';
 } else {
-    $("h1").text("Click Start Or Press Any Key to Play")
+    levelIndicator.innerText = 'Click Start Or Press Any Key to Play'
 }
 
-
-$("#start").click(function () {
-    if (started === false) {
-        nextSequence();
-        $('h1').text(`level ${level}`)
-        started = true;
-        $("#rule").fadeOut();
-        $("#start").fadeOut();
-    }
-})
-$(document).keydown(function () {
-
-    if (started === false) {
-        nextSequence();
-        $('h1').text(`level ${level}`)
-        started = true;
-        $("#rule").fadeOut();
-        $("#start").fadeOut();
-    }
+//Rule Section Appear and disappear
+const ruleButton = document.querySelector('#rule')
+const ruleCloseButton = document.querySelector('#close');
+const ruleContainer = document.querySelector('#rules-container')
+//Rule Section Appear
+ruleButton.addEventListener('click', function () {
+    ruleContainer.setAttribute('id', 'visible');
+});
+//Rule Section Disappear
+ruleCloseButton.addEventListener('click', function () {
+    ruleContainer.setAttribute('id', 'rules-container')
 })
 
+//game start on click Start Button
+startButton.addEventListener('click', function () {
+    if (started === false) {
+        gameStart();
+    }
+})
+
+//game Start on keypress
+let started = false;
+window.addEventListener('keydown', function () {
+    if (started === false) {
+        gameStart()
+    }
+})
+//game Start Function
+function gameStart() {
+    nextSequence();
+    levelIndicator.innerText = `Level ${level}`;
+    started = true;
+    ruleButton.setAttribute('id', 'hidden');
+    startButton.setAttribute('id', 'hidden');
+}
+
+// nextSequence() Function to add random color to gamePattern[]
+let randomNumber;
+let randomColorChosen;
+let level = 0;
+let randomButtonBlink;
 function nextSequence() {
     userClickedPattern = [];
-    var randomNumber = Math.floor(Math.random() * 4);
-    var randomChosenColour = buttonColours[randomNumber];
-    gamePattern.push(randomChosenColour);
-    $(`#${randomChosenColour}`).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
-    playSound(randomChosenColour);
+    randomNumber = Math.floor((Math.random() * 4));
+    randomColorChosen = buttonColors[randomNumber];
+    gamePattern.push(randomColorChosen);
+    randomButtonBlink = document.querySelector(`#${randomColorChosen}`)
+    randomButtonBlink.classList.add('elementToFadeInAndOut')
+    setTimeout(function () {
+        randomButtonBlink.classList.remove('elementToFadeInAndOut')
+    }, 100)
+    playSound(randomColorChosen)
     level++;
-    $('h1').text(`level ${level}`)
+    levelIndicator.innerText = `Level: ${level}`
+
 }
 
-$(".btn").on("click", function () {
 
-    var userChosenColour = this.getAttribute("id");
-    userClickedPattern.push(userChosenColour);
-    playSound(userChosenColour);
-    animatePress(userChosenColour);
-    var index = userClickedPattern.length - 1
-    checkAnswer(index)
-});
+//looping thorugh Each button on clicked and adding clicked color to userClickedPattern[]
+button.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        if (started === true) {
+            var userChosenColor = this.getAttribute('id');
+            userClickedPattern.push(userChosenColor);
+            playSound(userChosenColor)
+            animatePress(userChosenColor);
+            var index = userClickedPattern.length - 1;
+            checkAnswer(index);
+        }
+    })
 
-function checkAnswer(currentLevel) {
-    if (userClickedPattern[currentLevel] === gamePattern[currentLevel]) {
-        console.log("Success");
+})
+//Fucntion to Check Answer
+function checkAnswer(index) {
+    if (userClickedPattern[index] === gamePattern[index]) {
         if (userClickedPattern.length === gamePattern.length) {
             setTimeout(function () {
                 nextSequence();
             }, 1000)
         }
     } else {
-        console.log("Wrong");
-        var wrong = new Audio("./sounds/wrong.mp3")
+        console.log('wrong');
+        var wrong = new Audio('./sounds/wrong.mp3');
         wrong.play();
-        $("body").addClass("game-over");
+        body.classList.add('game-over');
         setTimeout(function () {
-            $("body").removeClass("game-over");
+            body.classList.remove('game-over');
         }, 200)
-        $("h1").text("Game Over, Press Start to Restart")
+        levelIndicator.innerText = 'Game Over, Press Start to Restart';
         Swal.fire("YOU REACHED TO THE LEVEL: " + (level))
         startOver();
-        $("#rule").fadeIn();
-        $("#start").fadeIn();
+        ruleButton.setAttribute('id', 'rule')
+        startButton.setAttribute('id', 'start');
+
     }
 }
 
+//startOver() is called on game-over;
 function startOver() {
     level = 0;
     gamePattern = [];
     started = false;
 }
 
+//Animation On clicking Button;
+function animatePress(currentColor) {
+    let currentButton = document.querySelector(`.${currentColor}`);
+    currentButton.classList.add('pressed');
+    setTimeout(function () {
+        currentButton.classList.remove('pressed');
+    }, 70)
+}
 
+//sound Play On clicking Button
 function playSound(sound) {
     switch (sound) {
-        case "red":
-            var red = new Audio("/sounds/red.mp3");
+        case 'red':
+            var red = new Audio('/sounds/red.mp3');
             red.play();
             break;
-        case "blue":
-            var blue = new Audio("/sounds/blue.mp3");
+        case 'blue':
+            var blue = new Audio('/sounds/blue.mp3');
             blue.play();
             break;
-        case "green":
-            var green = new Audio("/sounds/green.mp3");
+        case 'green':
+            var green = new Audio('/sounds/green.mp3');
             green.play();
             break;
-        case "yellow":
-            var yellow = new Audio("/sounds/yellow.mp3");
+        case 'yellow':
+            var yellow = new Audio('/sounds/yellow.mp3');
             yellow.play();
             break;
-        default: sound;
     }
 }
-
-function animatePress(currentColour) {
-    $(`.${currentColour}`).addClass("pressed")
-    setTimeout(function () {
-        $(`.${currentColour}`).removeClass("pressed")
-    }, 100)
-}
-
-$("#rule").click(function () {
-    $("#rules-container").attr("id", "visible")
-});
-
-$("#close").click(function () {
-    $("#visible").attr("id", "rules-container")
-
-})
